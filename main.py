@@ -19,6 +19,8 @@ def parse_input(user_input: str):
 
 def main():
     book = AddressBook()
+    print("Loading addressbook data....")
+    book.load_data()
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")

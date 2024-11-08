@@ -21,14 +21,14 @@ def add_record(args: list, book: AddressBook) -> str:
     record = book.find(name)
     if record is not None:
         record.add_phone(phone)
-        return "Contact changed"
+    else:
+        new_record = Record(name)
+        new_record.add_phone(phone)
+        if birthday is not None:
+            new_record.add_birthday(birthday)
+        book.add_record(new_record)
 
-    new_record = Record(name)
-    new_record.add_phone(phone)
-    if birthday is not None:
-        new_record.add_birthday(birthday)
-    book.add_record(new_record)
-
+    book.save_data()
     return "Contact added"
 
 
@@ -41,6 +41,7 @@ def add_phone(args: list[str], book: AddressBook) -> str:
         raise KeyError
 
     record.add_phone(phone)
+    book.save_data()
     return "Contact changed"
 
 
@@ -53,6 +54,7 @@ def change_phone(args: list[str], book: AddressBook) -> str:
         raise KeyError
 
     record.edit_phone(old_phone, new_phone)
+    book.save_data()
     return "Contact changed"
 
 
@@ -85,6 +87,7 @@ def add_birthday(args: list, book: AddressBook) -> str:
         raise KeyError
 
     record.add_birthday(birthday)
+    book.save_data()
     return "Contact changed"
 
 
@@ -119,4 +122,5 @@ def delete(args: list, book: AddressBook):
         raise KeyError
 
     book.delete(name)
+    book.save_data()
     return "Contact deleted"

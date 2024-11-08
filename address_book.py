@@ -1,3 +1,4 @@
+import pickle
 from datetime import datetime, timedelta
 
 from collections import UserDict
@@ -7,6 +8,8 @@ from constants import FRIDAY, WEEK, DATE_FORMAT
 
 
 class AddressBook(UserDict[str, Record]):
+    def __init__(self, filename: str = "addressbook.dat"):
+        self.filename = filename
 
     def find(self, name: str) -> Record | None:
         result = [record for record in self.data if record == name]
@@ -50,6 +53,19 @@ class AddressBook(UserDict[str, Record]):
     def delete(self, name: str):
         if name in self.data:
             del self.data[name]
+
+    def save_data(self):
+        with open(self.filename, "wb") as file:
+            pickle.dump(self, file)
+        print("Data saved!")
+
+    def load_data(self):
+        try:
+            with open(self.filename, "rb") as file:
+                self.data = pickle.load(file)
+        except FileNotFoundError as e:
+            print(e)
+            self.data = {}
 
 
 if __name__ == "__main__":
